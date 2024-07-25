@@ -98,11 +98,3 @@ If you encounter issues, consider the following:
 ## Contributing
 
 Feel free to submit issues or pull requests. Follow standard GitHub contribution guidelines for contributions.
-
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
-
----
-
-Replace `<repository-url>` and `<repository-folder>` with the actual URL of your Git repository and the folder name, respectively. Adjust any specific details related to your project as needed.
