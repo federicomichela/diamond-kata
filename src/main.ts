@@ -1,36 +1,53 @@
 import {buildDiamond, getLettersBefore, matrixToStr} from "./utils";
 
-function generateDiamond(event: MouseEvent) {
-    const letterBtn: HTMLElement = event.target as HTMLElement
-    const letter: string | null = letterBtn?.getAttribute("data-value")
+function initLettersDiamond(): HTMLElement {
+    destroyLettersDiamond()
 
-    if (!letterBtn || !letter) {
-        throw new Error('Unable to identify selected letter')
-    }
+    const containerEl = document.createElement('div')
+    const diamondShape = document.createElement('div')
 
+    containerEl.className = 'diamond-container'
+    diamondShape.className = 'diamond-shape'
+
+    containerEl.appendChild(diamondShape)
+    document.querySelector('main')?.appendChild(containerEl)
+
+    return containerEl;
+}
+
+function destroyLettersDiamond() {
+    let mainEl: HTMLElement | null = document.querySelector('main')
+    let diamondContainerEl: HTMLElement | null | undefined = mainEl?.querySelector('.diamond-container')
+
+    if (!mainEl || !diamondContainerEl) return
+
+    mainEl.removeChild(diamondContainerEl)
+}
+
+function selectLetterBtn(letterBtnEl: HTMLElement) {
+    document
+        .querySelectorAll('.letter-btn--selected')
+        .forEach((btn) => deselectLetterBtn(btn as HTMLElement))
+
+    letterBtnEl.classList.add('letter-btn--selected')
+}
+
+function deselectLetterBtn(letterBtnEl: HTMLElement) {
+    letterBtnEl.classList.remove('letter-btn--selected')
+}
+
+function generateDiamond(letter: string) {
     const matrix = buildDiamond(letter)
 
     // !!EASTER EGG!! copy to clipboard
-    navigator.clipboard.writeText(matrixToStr(matrix)).then(r => {
-        letterBtn.addEventListener('transitionend', () => {
-            letterBtn.classList.remove('letter-btn--copied');
-        }, { once: true });
-
-        letterBtn.classList.add('letter-btn--copied')
+    navigator.clipboard.writeText(matrixToStr(matrix)).then(() => {
+        // TODO: show message
     })
 
-    let containerEl = document.querySelector('.diamond-container')
+    // attach new table
+    const containerEl: HTMLElement = initLettersDiamond()
     const table = document.createElement('table')
 
-    if (!containerEl) {
-        containerEl = document.createElement('div')
-        containerEl.className = 'diamond-container'
-        document.appendChild(containerEl)
-    }
-
-    // reset container content
-    containerEl.innerHTML = ''
-    // attach new table
     containerEl.appendChild(table)
 
     // Loop through the rows of the matrix
@@ -63,7 +80,22 @@ function initLettersPicker(containerEl: HTMLElement, upperCase: boolean = false)
         letterEl.classList.add('letter-btn')
         letterEl.setAttribute('data-value', letter)
         letterEl.textContent = letter
-        letterEl.addEventListener('click', generateDiamond)
+        letterEl.addEventListener('click', (event: UIEvent) => {
+            if (!event || !event.target) return;
+
+            const letterBtn = event.target as HTMLElement
+            const isLetterBtnSelected = letterBtn.classList.contains('letter-btn--selected')
+            const letter: string | null = letterBtn.getAttribute('data-value')
+
+            if (!letter) return;
+
+            if (isLetterBtnSelected) {
+                deselectLetterBtn(letterBtn)
+            } else {
+                selectLetterBtn(letterBtn)
+                generateDiamond(letter)
+            }
+        })
 
         containerEl.appendChild(letterEl)
     })
