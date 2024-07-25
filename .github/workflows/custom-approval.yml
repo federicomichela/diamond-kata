@@ -1,0 +1,28 @@
+name: Auto-approve PRs
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize]
+
+jobs:
+  approve:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check PR Author
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const prAuthor = context.payload.pull_request.user.login;
+            const reviewer = 'federicomichela';
+
+            if (prAuthor === reviewer) {
+              const response = await github.pulls.createReview({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: context.issue.number,
+                event: 'APPROVE'
+              });
+              console.log(response.data);
+            } else {
+              console.log('PR author is not authorized to auto-approve');
+            }
