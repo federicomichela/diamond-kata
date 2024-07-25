@@ -1,0 +1,33 @@
+{
+  "name": "diamond-generator",
+  "version": "1.0.0",
+  "description": "practice kata",
+  "main": "main.js",
+  "scripts": {
+    "test": "npx vitest run --coverage",
+    "watch-ts": "npx tsc --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/federicomichela/diamond-kata.git"
+  },
+  "keywords": [
+    "kata",
+    "diamondo-kata",
+    "printing-letters"
+  ],
+  "author": "Michela Federico <federico.michela@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/federicomichela/diamond-kata/issues"
+  },
+  "homepage": "https://github.com/federicomichela/diamond-kata#readme",
+  "devDependencies": {
+    "@types/node": "^20.14.12",
+    "@vitest/coverage-v8": "^2.0.4",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.4",
+    "vite": "^5.3.5",
+    "vitest": "^2.0.4"
+  }
+}
